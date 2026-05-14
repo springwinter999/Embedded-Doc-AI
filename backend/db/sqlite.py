@@ -2,7 +2,7 @@ import sqlite3
 import os
 from config import SQLITE_DB_PATH
 
-_conn: sqlite3.Connection | None = None
+_conn = None
 
 
 def init_db(db_path: str | None = None):
@@ -10,7 +10,7 @@ def init_db(db_path: str | None = None):
     path = db_path or SQLITE_DB_PATH
     if path != ":memory:":
         os.makedirs(os.path.dirname(path), exist_ok=True)
-    _conn = sqlite3.connect(path)
+    _conn = sqlite3.connect(path, check_same_thread=False)
     _conn.row_factory = sqlite3.Row
     _conn.execute("PRAGMA journal_mode=WAL")
     _conn.execute("PRAGMA foreign_keys=ON")
