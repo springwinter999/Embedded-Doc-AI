@@ -1,29 +1,27 @@
-import httpx
-from config import DEEPSEEK_API_KEY, DEEPSEEK_BASE_URL, EMBEDDING_MODEL
+from sentence_transformers import SentenceTransformer
+from config import EMBEDDING_MODEL
+
+_model: SentenceTransformer | None = None
+
+
+def _get_model() -> SentenceTransformer:
+    global _model
+    if _model is None:
+        _model = SentenceTransformer(EMBEDDING_MODEL)
+    return _model
 
 
 def embed_text(text: str) -> list[float]:
-    """Convert a single text to a 768-dim embedding vector."""
+    """Convert a single text to an embedding vector."""
     if not text or not text.strip():
         raise ValueError("Input text must not be empty")
-    embeddings = embed_batch([text])
-    return embeddings[0]
+    model = _get_model()
+    embedding = model.encode(text, normalize_embeddings=True)
+    return embedding.tolist()
 
 
 def embed_batch(texts: list[str]) -> list[list[float]]:
-    """Convert multiple texts to embedding vectors in one API call."""
-    with httpx.Client(timeout=60) as client:
-        response = client.post(
-            f"{DEEPSEEK_BASE_URL}/v1/embeddings",
-            headers={
-                "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": EMBEDDING_MODEL,
-                "input": texts,
-            },
-        )
-        response.raise_for_status()
-        data = response.json()
-        return [item["embedding"] for item in data["data"]]
+    """Convert multiple texts to embedding vectors."""
+    model = _get_model()
+    embeddings = model.encode(texts, normalize_embeddings=True)
+    return embeddings.tolist()
