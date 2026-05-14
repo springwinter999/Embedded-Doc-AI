@@ -20,12 +20,11 @@ export default function ConversationList({
   return (
     <div
       style={{
-        width: 240,
+        flex: 1,
         background: "var(--bg-sidebar)",
-        borderRight: "1px solid var(--border)",
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        minHeight: 0,
       }}
     >
       <div style={{ padding: "18px 14px" }}>

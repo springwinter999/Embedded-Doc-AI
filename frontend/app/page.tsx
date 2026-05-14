@@ -5,6 +5,7 @@ import { useConversations } from "@/hooks/useConversations";
 import { getChatHistory, type ChatHistoryResponse } from "@/lib/api";
 import ConversationList from "@/components/ConversationList";
 import ChatPanel from "@/components/ChatPanel";
+import DocumentManager from "@/components/DocumentManager";
 
 export default function Home() {
   const chat = useChat();
@@ -40,13 +41,25 @@ export default function Home() {
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
-      <ConversationList
-        conversations={convs.conversations}
-        activeId={chat.conversationId}
-        onSelect={handleSelect}
-        onDelete={handleDelete}
-        onNew={handleNew}
-      />
+      <div
+        style={{
+          width: 240,
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+          background: "var(--bg-sidebar)",
+          borderRight: "1px solid var(--border)",
+        }}
+      >
+        <ConversationList
+          conversations={convs.conversations}
+          activeId={chat.conversationId}
+          onSelect={handleSelect}
+          onDelete={handleDelete}
+          onNew={handleNew}
+        />
+        <DocumentManager />
+      </div>
       <ChatPanel
         messages={chat.messages}
         loading={chat.loading}

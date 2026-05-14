@@ -96,3 +96,33 @@ export function indexDocuments(): Promise<{
 export function listDocuments(): Promise<{ documents: DocumentStats[] }> {
   return request<{ documents: DocumentStats[] }>("/documents");
 }
+
+export async function uploadDocument(file: File): Promise<{
+  status: string;
+  filename: string;
+  total_chunks: number;
+  message: string;
+}> {
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await fetch(`${BASE_URL}/documents/upload`, {
+    method: "POST",
+    body: formData,
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(body || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+export async function deleteDocument(filename: string): Promise<{
+  status: string;
+  filename: string;
+  removed_chunks: number;
+  message: string;
+}> {
+  return request(`/documents/${encodeURIComponent(filename)}`, {
+    method: "DELETE",
+  });
+}

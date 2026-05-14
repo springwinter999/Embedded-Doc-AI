@@ -54,6 +54,16 @@ def get_document_stats() -> list[dict]:
     return [{"filename": k, "chunk_count": v} for k, v in stats.items()]
 
 
+def delete_document(filename: str) -> int:
+    """Delete all chunks belonging to a specific filename. Returns count of removed chunks."""
+    coll = get_collection()
+    results = coll.get(where={"filename": filename}, include=[])
+    ids_to_delete = results["ids"]
+    if ids_to_delete:
+        coll.delete(ids=ids_to_delete)
+    return len(ids_to_delete)
+
+
 def clear_all():
     """Remove all documents from the collection."""
     reset_collection()

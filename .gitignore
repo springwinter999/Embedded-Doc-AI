@@ -1,0 +1,26 @@
+.env
+.superpowers/
+.claude/
+node_modules/
+__pycache__/
+*.pyc
+.env.local
+.next/
+
+# Data & databases
+backend/data/
+chroma_db/
+conversations.db
+conversations.db-shm
+conversations.db-wal
+
+# Model cache
+backend/models_cache/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
