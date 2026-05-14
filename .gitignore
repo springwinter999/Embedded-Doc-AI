@@ -6,7 +6,7 @@ __pycache__/
 *.pyc
 .env.local
 .next/
-
+.gitignore
 # Data & databases
 backend/data/
 chroma_db/
@@ -24,3 +24,7 @@ backend/models_cache/
 # OS
 .DS_Store
 Thumbs.db
+
+# Documentation
+docs/
+
